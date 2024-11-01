@@ -1,32 +1,30 @@
-import React from 'react';
-import { StyleSheet, Text, SafeAreaView, Pressable, Modal } from 'react-native';
+// import React from 'react';
+import { useState } from 'react';
+import { StyleSheet, Text, SafeAreaView, Pressable } from 'react-native';
+import Formulario from './src/components/Formulario';
 
 export default function App() {
-   const nuevaCitaHandler = () => {
-    console.log('Presssioonando')
-   }
+  const [modalVisible, setModalVisible] = useState(false)
+
 
   return (
     <SafeAreaView style={styles.contenedor}>
-
 
       <Text style={styles.titulo}>Administrador de Citas {' '}
         <Text style={styles.tituloBold}>Veterinaria</Text>
       </Text>
 
       <Pressable
-        onPress={nuevaCitaHandler}
+        onPress={() => setModalVisible(true)}
         style={styles.btnNuevaCita}
       >
         <Text style={styles.btnNuevaCitaTexto}>Nueva Cita</Text>
       </Pressable>
 
-      <Modal
-        animationType='slide'
-        visible={false}
-      >
-        <Text>Desde modal</Text>
-      </Modal>
+      <Formulario 
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+      />
 
     </SafeAreaView>
   );
@@ -66,6 +64,5 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     textTransform: 'uppercase'
   }
-
 
 });
