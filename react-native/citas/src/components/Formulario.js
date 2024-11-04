@@ -1,5 +1,6 @@
 import { useState } from "react"
-import { StyleSheet, Text, Modal, SafeAreaView, TextInput, View, ScrollView } from "react-native"
+import { StyleSheet, Text, Modal, SafeAreaView, TextInput, View, ScrollView, Pressable } from "react-native"
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const Formulario = ({ modalVisible, setModalVisible }) => {
   const [paciente, setPaciente] = useState('')
@@ -7,7 +8,13 @@ const Formulario = ({ modalVisible, setModalVisible }) => {
   const [email, setEmail] = useState('')
   const [telefono, setTelefono] = useState('')
   const [sintomas, setSintomas] = useState('')
+  const [fechaVisible, setFechaVisible] = useState(false)
+  const [fecha, setFecha] = useState('')
 
+  const handleConfirmDate = (date) => {
+    setFechaVisible(false)
+    setFecha(date.toString())
+  }
 
 
   return (
@@ -21,6 +28,13 @@ const Formulario = ({ modalVisible, setModalVisible }) => {
         <Text style={styles.titulo}>Nueva {' '}
           <Text style={styles.tituloBold}>Cita</Text>
         </Text>
+
+        <Pressable
+          style={styles.btnCancelar}
+          onLongPress={() => setModalVisible(false)}
+        >
+          <Text style={styles.btnCancelarTexto}>X Cancelar</Text>
+        </Pressable>
 
         <View style={styles.campo}>
           <Text style={styles.label}>Nombre Paciente</Text>
@@ -70,6 +84,23 @@ const Formulario = ({ modalVisible, setModalVisible }) => {
         </View>
 
         <View style={styles.campo}>
+          <Text style={styles.label}>Fecha</Text>
+          <Pressable
+            onPress={() => setFechaVisible(true)}
+            style={styles.input}
+          >
+            <Text>{fecha === '' ? '-- -- --' : fecha}</Text>
+          </Pressable>
+          
+          <DateTimePickerModal
+            isVisible={fechaVisible}
+            mode="datetime"
+            onConfirm={handleConfirmDate}
+            onCancel={() => setFechaVisible(false)}
+          />
+        </View>
+
+        <View style={styles.campo}>
           <Text style={styles.label}>Sintomas</Text>
           <TextInput
             style={[styles.input, styles.sintomasInput]}
@@ -81,6 +112,12 @@ const Formulario = ({ modalVisible, setModalVisible }) => {
             numberOfLines={4}
           />
         </View>
+
+        <Pressable
+          style={styles.btnNuevaCita}
+        >
+          <Text style={styles.btnNuevaCitaTexto}>Agregar Paciente</Text>
+        </Pressable>
 
       </ScrollView>
     </SafeAreaView>
@@ -104,7 +141,22 @@ const styles = StyleSheet.create({
 
   tituloBold: {
     fontWeight: '900',
+  },
 
+  btnCancelar: {
+    backgroundColor: '#5827A4',
+    marginVertical: 30,
+    marginHorizontal: 30,
+    padding: 20,
+    borderRadius: 10,
+  },
+
+  btnCancelarTexto: {
+    color: '#fff',
+    textAlign: 'center',
+    fontWeight: '900',
+    fontSize: 16,
+    textTransform: 'uppercase'
   },
 
   campo: {
@@ -128,6 +180,22 @@ const styles = StyleSheet.create({
 
   sintomasInput: {
     height: 100,
+  },
+
+  btnNuevaCita: {
+    marginVertical: 50,
+    backgroundColor: '#F59E0B',
+    paddingVertical: 15,
+    marginHorizontal: 30,
+    borderRadius: 10
+  },
+
+  btnNuevaCitaTexto: {
+    color: '#5827A4',
+    textAlign: 'center',
+    textTransform: 'uppercase',
+    fontWeight: '700',
+    fontSize: 16
   }
 })
 
