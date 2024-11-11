@@ -1,19 +1,69 @@
 import { useState } from "react"
-import { StyleSheet, Text, Modal, SafeAreaView, TextInput, View, ScrollView, Pressable } from "react-native"
+import { StyleSheet, Text, Modal, SafeAreaView, TextInput, View, ScrollView, Pressable, Alert } from "react-native"
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
-const Formulario = ({ modalVisible, setModalVisible }) => {
+const Formulario = ({ modalVisible, setModalVisible, pacientes, setPacientes }) => {
   const [paciente, setPaciente] = useState('')
   const [propietario, setPropietario] = useState('')
   const [email, setEmail] = useState('')
   const [telefono, setTelefono] = useState('')
   const [sintomas, setSintomas] = useState('')
+  const [fecha, setFecha] = useState({})
   const [fechaVisible, setFechaVisible] = useState(false)
-  const [fecha, setFecha] = useState('')
 
-  const handleConfirmDate = (date) => {
+
+  const handleCita = () => {
+    if ([paciente, propietario, email, fecha, sintomas].includes('')) {
+      Alert.alert('Error', 'Todos los campos son obligatorios')
+      
+      return
+    }
+
+    const nuevoPaciente = {
+      id: Date.now(),
+      paciente,
+      propietario,
+      email,
+      telefono,
+      fecha,
+      sintomas
+    }
+
+    setPacientes([...pacientes, nuevoPaciente])
+    setModalVisible(false)
+    resetearFormulario()
+  }
+
+  const handleConfirmarFecha = (date) => {
     setFechaVisible(false)
-    setFecha(date.toString())
+    const fechaFormateada = formatearFecha(date)
+    setFecha(fechaFormateada)
+  }
+
+  const handleCancelerFormulario = () => {
+    setModalVisible(false),
+    resetearFormulario()
+  }
+
+  const formatearFecha = fecha => {
+    const nuevaFecha = new Date(fecha)
+    const opciones = {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    }
+
+    return nuevaFecha.toLocaleDateString('es', opciones)
+  }
+
+  const resetearFormulario = () => {
+    setPaciente(''),
+    setPropietario(''),
+    setEmail(''),
+    setTelefono(''),
+    setSintomas(''),
+    setFecha('')
   }
 
 
@@ -31,7 +81,7 @@ const Formulario = ({ modalVisible, setModalVisible }) => {
 
         <Pressable
           style={styles.btnCancelar}
-          onLongPress={() => setModalVisible(false)}
+          onLongPress={handleCancelerFormulario}
         >
           <Text style={styles.btnCancelarTexto}>X Cancelar</Text>
         </Pressable>
@@ -89,13 +139,13 @@ const Formulario = ({ modalVisible, setModalVisible }) => {
             onPress={() => setFechaVisible(true)}
             style={styles.input}
           >
-            <Text>{fecha === '' ? '-- -- --' : fecha}</Text>
+            <Text>{Object.keys(fecha).length === 0 ? '-- -- --' : fecha}</Text>
           </Pressable>
           
           <DateTimePickerModal
             isVisible={fechaVisible}
             mode="datetime"
-            onConfirm={handleConfirmDate}
+            onConfirm={handleConfirmarFecha}
             onCancel={() => setFechaVisible(false)}
           />
         </View>
@@ -115,6 +165,7 @@ const Formulario = ({ modalVisible, setModalVisible }) => {
 
         <Pressable
           style={styles.btnNuevaCita}
+          onPress={handleCita}
         >
           <Text style={styles.btnNuevaCitaTexto}>Agregar Paciente</Text>
         </Pressable>

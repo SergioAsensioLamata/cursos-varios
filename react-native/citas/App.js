@@ -1,11 +1,18 @@
 // import React from 'react';
 import { useState } from 'react';
-import { StyleSheet, Text, SafeAreaView, Pressable } from 'react-native';
+import { StyleSheet, Text, SafeAreaView, Pressable, FlatList } from 'react-native';
 import Formulario from './src/components/Formulario';
+import Paciente from './src/components/Paciente';
 
 export default function App() {
   const [modalVisible, setModalVisible] = useState(false)
+  const [pacientes, setPacientes ] = useState([])
+  const [paciente, setPaciente] = useState({})
 
+  const pacienteEditar = id => {
+    const pacienteEditar = pacientes.filter(paciente => paciente.id === id)
+    setPaciente(pacienteEditar[0])
+  }
 
   return (
     <SafeAreaView style={styles.contenedor}>
@@ -21,9 +28,30 @@ export default function App() {
         <Text style={styles.btnNuevaCitaTexto}>Nueva Cita</Text>
       </Pressable>
 
+      {pacientes.length === 0 ? 
+        <Text style={styles.noPacientes}>No hay pacientes aún</Text> : 
+        <FlatList
+          style={styles.listado}
+          data={pacientes}
+          keyExtractor={(item) => item.id }
+          renderItem={({item}) => {
+            return (
+              <Paciente 
+                item={item}
+                setModalVisible={setModalVisible}
+                pacienteEditar={pacienteEditar}
+              />
+            )
+          }}
+        />
+      }
+
       <Formulario 
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
+        pacientes={pacientes}
+        setPacientes={setPacientes}
+        paciente={paciente}
       />
 
     </SafeAreaView>
@@ -63,6 +91,18 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '900',
     textTransform: 'uppercase'
+  },
+
+  noPacientes: {
+    marginTop: 40,
+    textAlign: 'center',
+    fontSize: 24,
+    fontWeight: '600'
+  },
+
+  listado: {
+    marginTop: 50,
+    marginHorizontal: 30
   }
 
 });
