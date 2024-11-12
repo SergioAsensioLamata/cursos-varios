@@ -52,6 +52,7 @@ export default function App() {
         pacientes={pacientes}
         setPacientes={setPacientes}
         paciente={paciente}
+        setPaciente={setPaciente}
       />
 
     </SafeAreaView>

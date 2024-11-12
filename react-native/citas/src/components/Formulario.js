@@ -1,15 +1,28 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { StyleSheet, Text, Modal, SafeAreaView, TextInput, View, ScrollView, Pressable, Alert } from "react-native"
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
-const Formulario = ({ modalVisible, setModalVisible, pacientes, setPacientes }) => {
+const Formulario = ({ modalVisible, setModalVisible, pacientes, setPacientes, paciente: pacienteObj, setPaciente: setPAcienteApp }) => {
   const [paciente, setPaciente] = useState('')
+  const [id, setId] = useState('')
   const [propietario, setPropietario] = useState('')
   const [email, setEmail] = useState('')
   const [telefono, setTelefono] = useState('')
   const [sintomas, setSintomas] = useState('')
   const [fecha, setFecha] = useState({})
   const [fechaVisible, setFechaVisible] = useState(false)
+
+  useEffect(() => {
+    if(Object.keys(pacienteObj).length > 0) {
+      setId(pacienteObj.id)
+      setPaciente(pacienteObj.paciente)
+      setPropietario(pacienteObj.propietario)
+      setEmail(pacienteObj.email)
+      setTelefono(pacienteObj.telefono)
+      setSintomas(pacienteObj.sintomas)
+      setFecha(pacienteObj.fecha)
+    } 
+  }, [pacienteObj])
 
 
   const handleCita = () => {
@@ -20,7 +33,6 @@ const Formulario = ({ modalVisible, setModalVisible, pacientes, setPacientes }) 
     }
 
     const nuevoPaciente = {
-      id: Date.now(),
       paciente,
       propietario,
       email,
@@ -29,7 +41,24 @@ const Formulario = ({ modalVisible, setModalVisible, pacientes, setPacientes }) 
       sintomas
     }
 
-    setPacientes([...pacientes, nuevoPaciente])
+    // Revisar si es un paciente nuevo o estamos editando
+    if(id) {
+      // Editando
+      nuevoPaciente.id = id
+      
+      const pacientesActualizados = pacientes.map( pacienteState => 
+        pacienteState.id === nuevoPaciente.id ? nuevoPaciente : pacienteState
+      ) 
+    
+      setPacientes(pacientesActualizados)
+
+    } else {
+      // Nuevo Registro
+      nuevoPaciente.id = Date.now()
+      setPacientes([...pacientes, nuevoPaciente])
+      setPAcienteApp({})
+    }
+
     setModalVisible(false)
     resetearFormulario()
   }
@@ -43,6 +72,7 @@ const Formulario = ({ modalVisible, setModalVisible, pacientes, setPacientes }) 
   const handleCancelerFormulario = () => {
     setModalVisible(false),
     resetearFormulario()
+    setPAcienteApp({})
   }
 
   const formatearFecha = fecha => {
@@ -59,6 +89,7 @@ const Formulario = ({ modalVisible, setModalVisible, pacientes, setPacientes }) 
 
   const resetearFormulario = () => {
     setPaciente(''),
+    setId(''),
     setPropietario(''),
     setEmail(''),
     setTelefono(''),
@@ -75,7 +106,7 @@ const Formulario = ({ modalVisible, setModalVisible, pacientes, setPacientes }) 
     <SafeAreaView style={styles.contenedor}>
       <ScrollView>
 
-        <Text style={styles.titulo}>Nueva {' '}
+        <Text style={styles.titulo}>{pacienteObj.id ? 'Editar' :  'Nueva'} {' '}
           <Text style={styles.tituloBold}>Cita</Text>
         </Text>
 
@@ -167,7 +198,7 @@ const Formulario = ({ modalVisible, setModalVisible, pacientes, setPacientes }) 
           style={styles.btnNuevaCita}
           onPress={handleCita}
         >
-          <Text style={styles.btnNuevaCitaTexto}>Agregar Paciente</Text>
+          <Text style={styles.btnNuevaCitaTexto}>{pacienteObj.id ? 'Editar' : 'Agregar'} Paciente</Text>
         </Pressable>
 
       </ScrollView>
