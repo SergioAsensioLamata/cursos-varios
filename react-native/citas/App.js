@@ -1,21 +1,38 @@
 // import React from 'react';
 import { useState } from 'react';
-import { StyleSheet, Text, SafeAreaView, Pressable, FlatList } from 'react-native';
+import { StyleSheet, Text, SafeAreaView, Pressable, FlatList, Alert, Modal } from 'react-native';
 import Formulario from './src/components/Formulario';
 import Paciente from './src/components/Paciente';
+import InformacionPaciente from './src/components/InformacionPaciente';
 
 export default function App() {
   const [modalVisible, setModalVisible] = useState(false)
   const [pacientes, setPacientes ] = useState([])
   const [paciente, setPaciente] = useState({})
+  const [modalPaciente, setModalPaciente] = useState(false)
 
   const pacienteEditar = id => {
     const pacienteEditar = pacientes.filter(paciente => paciente.id === id)
     setPaciente(pacienteEditar[0])
   }
 
+  const pacienteEliminar = id =>  {
+    Alert.alert(
+      '¿Deseas eliminar este paciente?',
+      'Un paciente eliminado no se puede recuperar',
+      [
+        { text: 'Cancelar'},
+        { text: 'Si, Eliminar', onPress: () => {
+          const pacientesActualizados = pacientes.filter( 
+            pacientesState => pacientesState.id !== id )
+            setPacientes(pacientesActualizados)
+        }}
+      ]
+    )
+  }
+
   return (
-    <SafeAreaView style={styles.contenedor}>
+    <SafeAreaView style={!modalVisible ? styles.contenedor : styles.contenedorFalso }>
 
       <Text style={styles.titulo}>Administrador de Citas {' '}
         <Text style={styles.tituloBold}>Veterinaria</Text>
@@ -40,20 +57,37 @@ export default function App() {
                 item={item}
                 setModalVisible={setModalVisible}
                 pacienteEditar={pacienteEditar}
+                pacienteEliminar={pacienteEliminar}
+                setModalPaciente={setModalPaciente}
+                setPaciente={setPaciente}
               />
             )
           }}
         />
       }
 
-      <Formulario 
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
-        pacientes={pacientes}
-        setPacientes={setPacientes}
-        paciente={paciente}
-        setPaciente={setPaciente}
-      />
+      
+      {modalVisible && (
+        <Formulario 
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+          pacientes={pacientes}
+          setPacientes={setPacientes}
+          paciente={paciente}
+          setPaciente={setPaciente}
+        />)
+      }
+
+      <Modal
+        visible={modalPaciente}
+        animationType='fade'
+      >
+        <InformacionPaciente 
+          paciente={paciente}
+          setModalPaciente={setModalPaciente}
+          setPaciente={setPaciente}
+        />
+      </Modal>
 
     </SafeAreaView>
   );
@@ -62,14 +96,20 @@ export default function App() {
 const styles = StyleSheet.create({
   contenedor: {
     backgroundColor: '#F3F4F6',
-    flex: 1
+    flex: 1,
+  },
+
+  contenedorFalso: {
+    backgroundColor: '#6D28D9',
+    flex: 1,
   },
 
   titulo: {
     textAlign: 'center',
     fontSize: 30,
     color: '#374151',
-    fontWeight: '600'
+    fontWeight: '600',
+    marginTop: 20
   },
 
   tituloBold: {

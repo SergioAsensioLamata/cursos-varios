@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import React from "react";
 import { StyleSheet, Text, Modal, SafeAreaView, TextInput, View, ScrollView, Pressable, Alert } from "react-native"
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
@@ -51,6 +52,7 @@ const Formulario = ({ modalVisible, setModalVisible, pacientes, setPacientes, pa
       ) 
     
       setPacientes(pacientesActualizados)
+      setPaciente({})
 
     } else {
       // Nuevo Registro
