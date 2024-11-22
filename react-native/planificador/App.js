@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     position: 'absolute',
-    top: 120,
+    top: 10,
     right: 20
   }
 });
