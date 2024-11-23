@@ -48,7 +48,9 @@ export default function App() {
           animationType='slide'
           visible={modal}
         >
-          <FormularioGasto />
+          <FormularioGasto 
+            setModal={setModal}
+          />
         </Modal>
       )}
 
