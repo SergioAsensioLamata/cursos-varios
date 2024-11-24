@@ -1,9 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Text, SafeAreaView, View, TextInput, StyleSheet, Pressable } from 'react-native'
 import { Picker } from '@react-native-picker/picker'
 import globalStyles from '../styles'
 
-const FormularioGasto = ({ setModal}) => {
+const FormularioGasto = ({ setModal, handleGasto}) => {
+  const [nombre, setNombre] = useState('')
+  const [cantidad, setCantidad] = useState('')
+  const [categoria, setCategoria] = useState('')
+
+
   return (
     <SafeAreaView style={styles.contenedor}>
       <View>
@@ -23,6 +28,8 @@ const FormularioGasto = ({ setModal}) => {
           <TextInput
             style={styles.input} 
             placeholder='Nombre del gasto. ej. Comida'
+            value={nombre}
+            onChangeText={setNombre}
           />
         </View>
 
@@ -32,13 +39,18 @@ const FormularioGasto = ({ setModal}) => {
             style={styles.input}
             placeholder='Cantidad del gasto. ej. 300'
             keyboardType='numeric'
+            value={cantidad}
+            onChangeText={setCantidad}
           />
         </View>
 
         <View style={styles.campo}>
           <Text style={styles.label}>Categoría Gasto</Text>
-          <Picker>
-            <Picker.Item label='-- Seleccione --' value=''/>
+          <Picker
+            selectedValue={categoria}
+            onValueChange={setCategoria}
+          >
+            <Picker.Item label='-- Seleccione --' enabled={false}/>
             <Picker.Item label='Ahorro' value='ahorro'/>
             <Picker.Item label='Comida' value='comida'/>
             <Picker.Item label='Casa' value='casa'/>
@@ -49,7 +61,10 @@ const FormularioGasto = ({ setModal}) => {
           </Picker>
         </View>
 
-        <Pressable style={styles.submitBtn}>
+        <Pressable 
+          style={styles.submitBtn}
+          onPress={() => handleGasto({nombre, cantidad , categoria})}
+        >
           <Text style={styles.submitBtnTexto}>Agregar Gasto</Text>
         </Pressable>
 
