@@ -1,10 +1,11 @@
-import { SafeAreaView, StyleSheet, Text, View, Alert, Pressable, Image, Modal } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Text, View, Alert, Pressable, Image, Modal } from 'react-native';
 import { useState } from 'react';
 import Header from './src/components/Header';
 import NuevoPresupuesto from './src/components/NuevoPresupuesto';
 import ControlPresupuesto from './src/components/ControlPresupuesto';
 import FormularioGasto from './src/components/FormularioGasto';
 import { generarId } from './src/helpers';
+import ListadoGastos from './src/components/ListadoGastos';
 
 
 export default function App() {
@@ -18,11 +19,12 @@ export default function App() {
     if (Number(presupuesto) > 0) {
       setIsValidPresupuesto(true)
     } else {
-      Alert.alert('Error', 'El presupuesto no puede ser 0 o menor', 
-        'Ok'
+      Alert.alert('Error', 
+        'El presupuesto no puede ser 0 o menor'
       )
       
     }
+    return
   }
 
   const handleGasto = gasto => {
@@ -62,6 +64,12 @@ export default function App() {
           />)
         }
       </View>
+
+      {isValidPresupuesto && (
+        <ListadoGastos 
+          gastos={gastos}
+        />
+      )}
 
       {modal && (
         <Modal 
