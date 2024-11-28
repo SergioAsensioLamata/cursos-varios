@@ -48,28 +48,31 @@ export default function App() {
 
   return (
     <View style={styles.contenedor}>
-      <View style={styles.header}>
-        <Header />
+      <ScrollView>
+        <View style={styles.header}>
+          <Header />
 
-        {isValidPresupuesto ? (
-          <ControlPresupuesto 
-            presupuesto={presupuesto} 
-            gastos={gastos}  
-          /> 
-          ) : ( 
-          <NuevoPresupuesto 
-            handleNuevoPresupuesto={handleNuevoPresupuesto}
-            presupuesto={presupuesto}
-            setPresupuesto={setPresupuesto}
-          />)
-        }
-      </View>
+          {isValidPresupuesto ? (
+            <ControlPresupuesto 
+              presupuesto={presupuesto} 
+              gastos={gastos}  
+            /> 
+            ) : ( 
+            <NuevoPresupuesto 
+              handleNuevoPresupuesto={handleNuevoPresupuesto}
+              presupuesto={presupuesto}
+              setPresupuesto={setPresupuesto}
+            />)
+          }
+        </View>
 
-      {isValidPresupuesto && (
-        <ListadoGastos 
-          gastos={gastos}
-        />
-      )}
+        {isValidPresupuesto && (
+          <ListadoGastos 
+            gastos={gastos}
+          />
+        )}
+
+      </ScrollView>
 
       {modal && (
         <Modal 
@@ -105,13 +108,14 @@ const styles = StyleSheet.create({
 
   header: {
     backgroundColor: '#3B82F6',
+    minHeight: 400
   },
 
   imagen: {
     width: 60,
     height: 60,
     position: 'absolute',
-    top: 10,
-    right: 20
+    bottom: 40,
+    right: 30
   }
 });

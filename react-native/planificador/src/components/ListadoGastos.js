@@ -18,18 +18,20 @@ const ListadoGastos = ({ gastos }) => {
 
 const styles = StyleSheet.create({
   contenedor: {
-    marginTop: 70
+    marginTop: 70,
+    marginBottom: 100
   },
 
   titulo: {
     color: '#64748B',
     fontSize: 30,
     fontWeight: '700',
-    textAlign: 'center'
+    textAlign: 'center',
+    marginTop: 20
   },
 
   noGastos: {
-    marginTop: 20,
+    marginVertical: 20,
     textAlign: 'center',
     fontSize: 20
   }
