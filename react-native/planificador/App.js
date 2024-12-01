@@ -41,6 +41,8 @@ export default function App() {
 
     // Añadir el nuevo gasto
     gasto.id = generarId()
+    gasto.fecha = Date.now()
+
     setGastos([...gastos, gasto])
     setModal(false)
   }
