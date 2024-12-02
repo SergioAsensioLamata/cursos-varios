@@ -14,30 +14,39 @@ const diccionarioIconos = {
 }
 
 
-const Gasto = ({ gasto }) => {
+const Gasto = ({ gasto, setModal, setGasto }) => {
   const { nombre, categoria, cantidad, fecha } = gasto
 
-  return (
-    <View style={styles.contenedor}>
-      <View style={styles.contenido}>
-        <View style={styles.contenedorImagen}>
-          <Image 
-            style={styles.imagen}
-            source={diccionarioIconos[categoria]}
-          />
+  const handleAcciones = () => {
+    setModal(true)
+    setGasto(gasto)
+  }
 
-          <View style={styles.contenedorTexto}>
-            <Text style={styles.categoria}>{categoria}</Text>
-            <Text style={styles.nombre}>{nombre}</Text>
-            <Text style={styles.fecha}>{formatearFecha(fecha)}</Text>
+  return (
+    <Pressable
+      onLongPress={handleAcciones}
+    >
+      <View style={styles.contenedor}>
+        <View style={styles.contenido}>
+          <View style={styles.contenedorImagen}>
+            <Image 
+              style={styles.imagen}
+              source={diccionarioIconos[categoria]}
+            />
+
+            <View style={styles.contenedorTexto}>
+              <Text style={styles.categoria}>{categoria}</Text>
+              <Text style={styles.nombre}>{nombre}</Text>
+              <Text style={styles.fecha}>{formatearFecha(fecha)}</Text>
+
+            </View>
 
           </View>
 
+          <Text style={styles.cantidad}>{formatearCantidad(cantidad)}</Text>
         </View>
-
-        <Text style={styles.cantidad}>{formatearCantidad(cantidad)}</Text>
       </View>
-    </View>
+    </Pressable>
   )
 }
 

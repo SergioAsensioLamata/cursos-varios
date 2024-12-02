@@ -13,6 +13,7 @@ export default function App() {
   const [presupuesto, setPresupuesto] = useState(0)
   const [gastos, setGastos] = useState([])
   const [modal, setModal] = useState(false)
+  const [gasto, setGasto] = useState({})
 
 
   const handleNuevoPresupuesto = (presupuesto) => {
@@ -71,6 +72,9 @@ export default function App() {
         {isValidPresupuesto && (
           <ListadoGastos 
             gastos={gastos}
+            setModal={setModal}
+            setGasto={setGasto}
+            
           />
         )}
 
@@ -84,6 +88,8 @@ export default function App() {
           <FormularioGasto 
             setModal={setModal}
             handleGasto={handleGasto}
+            gasto={gasto}
+            setGasto={setGasto}
           />
         </Modal>
       )}
