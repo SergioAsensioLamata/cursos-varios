@@ -77,7 +77,7 @@ const FormularioGasto = ({ setModal, handleGasto, gasto, setGasto}) => {
 
         <Pressable 
           style={styles.submitBtn}
-          onPress={() => handleGasto({nombre, cantidad , categoria})}
+          onPress={() => handleGasto({nombre, cantidad , categoria, id, fecha})}
         >
           <Text style={styles.submitBtnTexto}>{gasto?.nombre ? 'Editar' : 'Agregar'} Gasto</Text>
         </Pressable>

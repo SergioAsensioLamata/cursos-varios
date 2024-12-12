@@ -31,7 +31,7 @@ export default function App() {
   const handleGasto = gasto => {
 
     // Comprobar formulario gasto rellenado
-    if(Object.values(gasto).includes('')){
+    if([gasto.nombre, gasto.categoria, gasto.cantidad].includes('')){
       Alert.alert(
         "Error",
         "Todos los campos son obligatorios",
@@ -40,11 +40,18 @@ export default function App() {
       return
     }
 
-    // Añadir el nuevo gasto
-    gasto.id = generarId()
-    gasto.fecha = Date.now()
+    if(gasto.id) {
+      const gastosAztualizados = gastos.map( gastoState => gastoState.id === gasto.id ? gasto : gastoState)
+      setGastos(gastosAztualizados)
 
-    setGastos([...gastos, gasto])
+    } else {
+      // Añadir el nuevo gasto
+      gasto.id = generarId()
+      gasto.fecha = Date.now()
+  
+      setGastos([...gastos, gasto])
+    }
+
     setModal(false)
   }
 
