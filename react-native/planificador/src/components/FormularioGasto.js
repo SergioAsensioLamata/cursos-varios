@@ -3,7 +3,7 @@ import { Text, SafeAreaView, View, TextInput, StyleSheet, Pressable } from 'reac
 import { Picker } from '@react-native-picker/picker'
 import globalStyles from '../styles'
 
-const FormularioGasto = ({ setModal, handleGasto, gasto, setGasto}) => {
+const FormularioGasto = ({ setModal, handleGasto, gasto, setGasto, eliminarGasto}) => {
   const [nombre, setNombre] = useState('')
   const [cantidad, setCantidad] = useState('')
   const [categoria, setCategoria] = useState('')
@@ -22,15 +22,21 @@ const FormularioGasto = ({ setModal, handleGasto, gasto, setGasto}) => {
 
   return (
     <SafeAreaView style={styles.contenedor}>
-      <View>
+      <View style={styles.contenedorBotones}>
         <Pressable 
-          style={styles.btnCancelar}
+          style={[styles.btn, styles.btnCancelar]}
           onLongPress={() => {
             setModal(false)
             setGasto({})
           }}
         >
-          <Text style={styles.btnCancelarTexto}>Cancelar</Text>
+          <Text style={styles.btnTexto}>Cancelar</Text>
+        </Pressable>
+        <Pressable 
+          style={[styles.btn, styles.btnEliminar]}
+          onLongPress={() => eliminarGasto(gasto.id)}
+          >
+          <Text style={styles.btnTexto}>Eliminar</Text>
         </Pressable>
       </View>
 
@@ -93,14 +99,28 @@ const styles = StyleSheet.create({
     flex: 1
   },
 
-  btnCancelar: {
-    backgroundColor: '#DB2777',
-    padding: 10,
-    marginTop: 30,
-    marginHorizontal: 10
+  contenedorBotones: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   },
 
-  btnCancelarTexto: {
+  btn: {
+    padding: 10,
+    marginTop: 30,
+    marginHorizontal: 10,
+    flex: 1
+  },
+
+  btnCancelar: {
+    backgroundColor: '#DB2777'
+
+  },
+
+  btnEliminar: {
+    backgroundColor: 'red'
+  },
+
+  btnTexto: {
     textTransform: 'uppercase',
     fontWeight: 'bold',
     textAlign: 'center',

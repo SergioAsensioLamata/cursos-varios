@@ -55,6 +55,23 @@ export default function App() {
     setModal(false)
   }
 
+  const eliminarGasto = id => {
+    Alert.alert(
+      '¿Deseas eliminar este gasto?',
+      'Un gasto eliminado no se puede recuperar',
+      [
+        { text: 'No', style: 'cancel'},
+        { text: 'Si, Eliminar', onPress: () => {
+            const gastosAztualizados = gastos.filter( gastoState => gastoState.id !== id )
+
+            setGastos(gastosAztualizados)
+            setModal(false)
+            setGasto({})
+        }}
+      ]
+    )
+  }
+
 
   return (
     <View style={styles.contenedor}>
@@ -97,12 +114,14 @@ export default function App() {
             handleGasto={handleGasto}
             gasto={gasto}
             setGasto={setGasto}
+            eliminarGasto={eliminarGasto}
           />
         </Modal>
       )}
 
       {isValidPresupuesto && (
         <Pressable
+          style={styles.pressable}
           onPress={() => setModal(true)}
         >
           <Image 
@@ -126,11 +145,16 @@ const styles = StyleSheet.create({
     minHeight: 400
   },
 
-  imagen: {
+  pressable: {
     width: 60,
     height: 60,
     position: 'absolute',
     bottom: 40,
     right: 30
+  },
+
+  imagen: {
+    width: 60,
+    height: 60,
   }
 });
