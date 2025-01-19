@@ -3,14 +3,23 @@ import { useState, useEffect } from 'react'
 import{ View, Image, Text, StyleSheet } from 'react-native'
 import globalStyles from '../styles'
 import{ formatearCantidad } from '../helpers'
+import { AnimatedCircularProgress } from 'react-native-circular-progress';
+
 
 const ControlPresupuesto = ({presupuesto, gastos}) => {
   const [disponible, setDisponible] = useState(0)
   const [gastado, setGastado] = useState(0)
+  const [porcentaje, setPorcentaje] = useState(0)
 
   useEffect(() => {
     const totalGastado = gastos.reduce( (total, gasto) => Number(gasto.cantidad) + total, 0)
     const totalDisponible = presupuesto - totalGastado
+
+    const nuevoPorcentaje = (
+      ((presupuesto -  totalDisponible) / presupuesto) * 100
+    )
+
+    setPorcentaje(nuevoPorcentaje)
 
     setGastado(totalGastado)
     setDisponible(totalDisponible)
@@ -19,10 +28,20 @@ const ControlPresupuesto = ({presupuesto, gastos}) => {
   return (
     <View style={styles.contenedor}>
       <View style={styles.centrarGrafica}>
-        <Image
-          style={styles.imagen}
-          source={require('../img/grafico.jpg')}
-        />
+      <AnimatedCircularProgress 
+              size={200}
+              width={18}
+              fill={porcentaje}
+              tintColor="#3B82F6"
+              backgroundColor="#f0f2f5"
+              rotation={0}
+      >
+        {
+          (porcentaje) => (
+            <Text>{porcentaje} %</Text>
+          )
+        }
+      </AnimatedCircularProgress>
       </View>
 
       <View style={styles.contenedorTexto}>

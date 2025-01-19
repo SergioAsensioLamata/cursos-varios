@@ -26,3 +26,4 @@ export const generarId = () => {
 
     return idGenerado
 }
+

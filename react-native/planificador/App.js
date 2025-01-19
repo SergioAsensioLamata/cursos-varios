@@ -8,6 +8,7 @@ import { generarId } from './src/helpers';
 import ListadoGastos from './src/components/ListadoGastos';
 
 
+
 export default function App() {
   const [isValidPresupuesto, setIsValidPresupuesto] = useState(false)
   const [presupuesto, setPresupuesto] = useState(0)
@@ -84,12 +85,15 @@ export default function App() {
               presupuesto={presupuesto} 
               gastos={gastos}  
             /> 
-            ) : ( 
+            ) : (
+            <>
             <NuevoPresupuesto 
               handleNuevoPresupuesto={handleNuevoPresupuesto}
               presupuesto={presupuesto}
               setPresupuesto={setPresupuesto}
-            />)
+            />
+            </> 
+          )
           }
         </View>
 
@@ -156,5 +160,9 @@ const styles = StyleSheet.create({
   imagen: {
     width: 60,
     height: 60,
+  },
+
+  prueba: {
+    marginTop: 100
   }
 });
