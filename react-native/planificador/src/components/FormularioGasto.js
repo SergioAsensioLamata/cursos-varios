@@ -32,12 +32,15 @@ const FormularioGasto = ({ setModal, handleGasto, gasto, setGasto, eliminarGasto
         >
           <Text style={styles.btnTexto}>Cancelar</Text>
         </Pressable>
-        <Pressable 
-          style={[styles.btn, styles.btnEliminar]}
-          onLongPress={() => eliminarGasto(gasto.id)}
-          >
-          <Text style={styles.btnTexto}>Eliminar</Text>
-        </Pressable>
+        {gasto?.id &&
+          <Pressable 
+            style={[styles.btn, styles.btnEliminar]}
+            onLongPress={() => eliminarGasto(gasto.id)}
+            >
+            <Text style={styles.btnTexto}>Eliminar</Text>
+          </Pressable>
+
+        }
       </View>
 
       <View style={styles.formulario}>

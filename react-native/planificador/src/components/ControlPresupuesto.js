@@ -19,7 +19,9 @@ const ControlPresupuesto = ({presupuesto, gastos}) => {
       ((presupuesto -  totalDisponible) / presupuesto) * 100
     )
 
-    setPorcentaje(nuevoPorcentaje)
+    setTimeout(() => {
+      setPorcentaje(nuevoPorcentaje)
+    }, 1000);
 
     setGastado(totalGastado)
     setDisponible(totalDisponible)
@@ -38,7 +40,10 @@ const ControlPresupuesto = ({presupuesto, gastos}) => {
       >
         {
           (porcentaje) => (
-            <Text>{porcentaje} %</Text>
+            <View style={styles.contenedorPorcentaje}>
+              <Text style={styles.textoPorcentaje}>{porcentaje} %</Text>
+              <Text style={styles.textoGastado}>Gastado</Text>
+            </View>
           )
         }
       </AnimatedCircularProgress>
@@ -89,6 +94,24 @@ const styles = StyleSheet.create({
   label: {
     fontWeight: '700',
     color: '#3B82F6'
+  },
+
+  contenedorPorcentaje: {
+  },
+
+  textoPorcentaje: {
+    fontSize: 50,
+    fontWeight: 'bold',
+    color: '#3B82F6',
+    textAlign: 'center',
+    marginBottom: 10
+  },
+
+  textoGastado: {
+    color: '#64748b',
+    fontWeight: '600',
+    fontSize: 15,
+    textAlign: 'center',
   }
 })
 
