@@ -16,6 +16,9 @@ export default function App() {
   const [gastos, setGastos] = useState([])
   const [modal, setModal] = useState(false)
   const [gasto, setGasto] = useState({})
+  const [filtro, setFiltro] = useState('')
+  const [gastosFiltrados, setGastosFiltrados] = useState([])
+
 
 
   const handleNuevoPresupuesto = (presupuesto) => {
@@ -100,11 +103,18 @@ export default function App() {
 
         {isValidPresupuesto && (
           <>
-            <Filtro />
+            <Filtro
+              filtro={filtro} 
+              setFiltro={setFiltro}
+              gastos={gastos}
+              setGastosFiltrados={setGastosFiltrados}
+            />
             <ListadoGastos 
               gastos={gastos}
               setModal={setModal}
               setGasto={setGasto}
+              filtro={filtro}
+              gastosFiltrados={gastosFiltrados}
             />
           </>
         )}
