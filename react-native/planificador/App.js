@@ -1,5 +1,6 @@
-import { SafeAreaView, ScrollView, StyleSheet, Text, View, Alert, Pressable, Image, Modal } from 'react-native';
-import { useState } from 'react';
+import { ScrollView, StyleSheet, View, Alert, Pressable, Image, Modal } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useState, useEffect } from 'react';
 import Header from './src/components/Header';
 import NuevoPresupuesto from './src/components/NuevoPresupuesto';
 import ControlPresupuesto from './src/components/ControlPresupuesto';
@@ -7,7 +8,6 @@ import FormularioGasto from './src/components/FormularioGasto';
 import { generarId } from './src/helpers';
 import ListadoGastos from './src/components/ListadoGastos';
 import Filtro from './src/components/Filtro';
-
 
 
 export default function App() {
@@ -19,8 +19,66 @@ export default function App() {
   const [filtro, setFiltro] = useState('')
   const [gastosFiltrados, setGastosFiltrados] = useState([])
 
+  useEffect(() => {
+    const obtenerPresupuestoStorage = async () => {
+      try {
+        const presupuestoStorage = await AsyncStorage.getItem('planificador_presupuesto') ?? 0
 
+        if(presupuestoStorage > 0) {
+          setPresupuesto(presupuestoStorage)
+          setIsValidPresupuesto(true)
+        }
 
+      } catch (error) {
+        console.log(error)
+      }
+
+    }
+
+    obtenerPresupuestoStorage()
+  }, [])
+
+  useEffect(() => {
+    if(isValidPresupuesto) {
+      const guardarPresupuestoStorage = async () => {
+        try {
+          await AsyncStorage.setItem('planificador_presupuesto', presupuesto)
+        } catch (error) {
+          console.log(error)
+        }
+      }
+      guardarPresupuestoStorage()
+    }
+
+  }, [isValidPresupuesto])
+
+  useEffect(() => {
+    const obtenerGastosStorage = async () => {
+      try {
+        const gastosStorage = await AsyncStorage.getItem('planificador_gastos')
+
+        setGastos( gastosStorage ? JSON.parse(gastosStorage) : [] )
+      } catch (error) {
+        console.log()
+      }
+    }
+
+    obtenerGastosStorage()
+  }, [])
+
+  useEffect(() => {
+    const guardarGastosStoerage =  async () => {
+      try {
+        await AsyncStorage.setItem('planificador_gastos', JSON.stringify(gastos))
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    guardarGastosStoerage()
+
+  }, [gastos])
+  
   const handleNuevoPresupuesto = (presupuesto) => {
     if (Number(presupuesto) > 0) {
       setIsValidPresupuesto(true)
@@ -77,6 +135,28 @@ export default function App() {
     )
   }
 
+  const resetesarApp = () => {
+    Alert.alert(
+      '¿Deseas resetear la app?',
+      'Esto eliminará presupuesto y gastos',
+      [
+
+        {text: 'No', style: 'cancel'},
+        {text: 'Si, Eliminar', onPress: async () => {
+          try {
+            await AsyncStorage.clear()
+
+            setIsValidPresupuesto(false)
+            setPresupuesto(0)
+            setGastos([])
+          } catch (error) {
+            console.log(error)
+          }
+        }}
+      ]
+    )
+  }
+
 
   return (
     <View style={styles.contenedor}>
@@ -88,6 +168,7 @@ export default function App() {
             <ControlPresupuesto 
               presupuesto={presupuesto} 
               gastos={gastos}  
+              resetesarApp={resetesarApp}
             /> 
             ) : (
             <>
