@@ -4,23 +4,23 @@ import { View, Text, TextInput, StyleSheet, TouchableWithoutFeedback, Animated, 
 import { Picker } from "@react-native-picker/picker"
 
 
-const Formulario = ({ busqueda, setBusqueda}) => {
+const Formulario = ({ busqueda, setBusqueda, setConsultar}) => {
 
   const { pais, ciudad } = busqueda 
-
   const [ animacionboton ] = useState(new Animated.Value(1))
 
   const consultarClima = () => {
     if(pais.trim() === '' || ciudad.trim() === '') {
-      mostrarAlert()
+      mostrarAlerta()
 
       return
-    } else {
-      console.log('Todo bien', pais,' -  ', ciudad )
     }
+
+    // Consultar la api
+    setConsultar(true)
   }
 
-  const mostrarAlert = () => {
+  const mostrarAlerta = () => {
     Alert.alert(
       'Error',
       'Agrega una Ciudad y País para la busqueda',
